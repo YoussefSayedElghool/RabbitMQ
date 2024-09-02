@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: gest
+      RABBITMQ_DEFAULT_PASS: gest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq 
+
+  consumer.api:
+    image: ${DOCKER_REGISTRY-}consumerapi
+    build:
+      context: .
+      dockerfile: Consumer.API/Dockerfile
+
+  producer.api:
+    image: ${DOCKER_REGISTRY-}producerapi
+    build:
+      context: .
+      dockerfile: Producer.API/Dockerfile
+
+volumes:
+  rabbitmq_data:
+# docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
+
+
